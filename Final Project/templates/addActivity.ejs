@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>New Activity</title>
+</head>
+
+<body>
+	<h1>New Activity - Saved to MongoDB db for your convenience!</h1>
+    <br>
+    <form action="/processActivity" method="post" onsubmit="return confirm('Are you sure you want to add this activity?');">
+    <fieldset>
+        <strong>Activity name: </strong><input type="text" name='name'>
+        <br>
+        <strong>How long will it take? (in minutes): </strong> <input type='text' name='time'>
+        <br>
+        <strong>Instructions:</strong><br>
+        <textarea name="information"></textarea>
+    </fieldset>
+    <input type='reset'>
+    <input type='submit' value='Submit Application'>
+    </form>
+    <br>
+    <hr>
+</body>
+</html>
