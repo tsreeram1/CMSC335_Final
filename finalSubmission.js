@@ -11,17 +11,16 @@ const { render } = require('ejs');
 app.use(express.static(__dirname));
 
 process.stdin.setEncoding("utf8");
-if (process.argv.length != 3) {
-    process.stdout.write(`Usage finalSubmission.js PORT_NUMBER_HERE\n`);
+if (process.argv.length != 2) {
+    process.stdout.write(`Usage finalSubmission.js\n`);
     process.exit(1);
   }
 
 app.set("views", path.resolve(__dirname, "templates"));
 app.set("view engine", "ejs");
 
-let portNumber = process.argv[2];
-console.log(`Web server started and running at http://localhost:${portNumber}`);
-http.createServer(app).listen(portNumber)
+console.log(`Web server started and running at http://localhost:3000`);
+http.createServer(app).listen(3000)
 
 app.use(bodyParser.urlencoded({extended:false}));
 
