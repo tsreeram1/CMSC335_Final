@@ -4,7 +4,7 @@ let express = require("express"); /* Accessing express module */
 let app = express(); /* app is a request handler function */
 let bodyParser = require("body-parser");
 
-const MongoModule = require("./MongoModule");
+const mongoModule = require("./mongoModule");
 
 const { render } = require('ejs');
 app.use(express.static(__dirname));
@@ -40,12 +40,12 @@ app.post("/processActivity", (request, response) => {
     time: time,
     instruction: instruction
   }
-  MongoModule.insertApplication(variables);
+  mongoModule.insertApplication(variables);
   response.render("activityReview", variables)
 });
 
 app.get("/randomActivity", async function (request, response) {
-  let data = await MongoModule.getAll();
+  let data = await mongoModule.getAll();
   let randIndex = Math.floor(Math.random() * data.length);
   let variables = {
         name: data[randIndex].name,
@@ -55,22 +55,40 @@ app.get("/randomActivity", async function (request, response) {
   response.render("getRandom", variables)
 });
 
-app.get("/deleteActivity", (request, response) => {
-  (async () => {
-    try {
-      await client.connect();
-      let activities = {};
-      // Insert into mongoDB database
-      await insertApplication(client, newData);
-      // Display on new page
-      response.render("activityReview", newData)
-    } catch (e) {
-      console.log("ERROR, ERROR: " + e);
-    } finally {
-      client.close()
-    }
-  })();
- });
+app.get("/deleteActivity", async function(request, response) {
+  let data = await mongoModule.getAll()
+  let activities = "";
+  data.forEach(element =>
+    activities += `<option value = "${element.name}">${element.name}</option>`
+  );
+  let variables = {
+    activities: activities
+  }
+  response.render("deleteActivity", variables)
+});
+
+app.post("/processDeleteActivity", async function(request, response) {
+  let {itemsSelected, deleteAllActivities} = request.body
+  let table = "<table border=1> <thead> <tr> <th>Activity</th> </tr> </thead> <tbody>";
+  if (deleteAllActivities == "on") {
+    let data = await mongoModule.getAll();
+    data.forEach(element =>
+      table += `<tr> <td>${element.name}</td> </tr>`  
+    )
+  } else if (itemsSelected != null) {
+    itemsSelected.forEach(element =>
+      table += `<tr> <td>${element}</td> </tr>`   
+    )
+  }
+  table += "</tbody> </table>";
+  console.log(itemsSelected + ",,,,," + deleteAllActivities)
+  let num = await mongoModule.deleteActivities(itemsSelected, deleteAllActivities);
+  let variables = {
+    table: table,
+    num: num
+  }
+  response.render("processDeleteActivities", variables)
+});
 
 let prompt = "Stop to shutdown the server: ";
 process.stdout.write(prompt);
