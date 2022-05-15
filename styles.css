@@ -6,3 +6,7 @@ h1 {
 body {
     background-image: url(./templates/Paddling_Ocean.png);
 }
+
+.elongate {
+    width: 300px
+}

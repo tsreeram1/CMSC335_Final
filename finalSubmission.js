@@ -5,6 +5,7 @@ let app = express(); /* app is a request handler function */
 let bodyParser = require("body-parser");
 
 const MongoModule = require("./MongoModule");
+const apiModule = require("./apiModule");
 
 const { render } = require('ejs');
 app.use(express.static(__dirname));
@@ -31,6 +32,14 @@ app.get("/", function (request, response) {
 // submit redirects to processapplication
 app.get("/addActivity", function (request, response) {
   response.render("addActivity");
+});
+
+// submit redirects to processapplication
+app.get("/addAPIActivity", async function (request, response) {
+  let variables = {
+    activityName: await apiModule.getActivityName()
+  }
+  response.render("addAPIActivity", variables);
 });
 
 app.post("/processActivity", (request, response) => {
