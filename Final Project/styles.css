@@ -2,3 +2,7 @@ h1 {
     color: Red;
     text-decoration: underline;
 }
+
+body {
+    background-image: url(./templates/Paddling_Ocean.png);
+}
