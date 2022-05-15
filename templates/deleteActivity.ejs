@@ -12,25 +12,27 @@
     <br>
     <form action="/processDeleteActivity" method="post" onsubmit="return confirm('Are you sure you want to delete this activity/activities?');">
         <fieldset>
-			<legend>Select activities to delete: </legend>
+			<legend>Select activities to delete</legend>
 			<select name="itemsSelected" multiple>
 				<%- activities %>
 			</select>
 		</fieldset>
+        <br>
         <fieldset>
             <legend>Delete all my activities</legend>
         
             <div>
-              <input type="checkbox" id="deleteAllActivities" name="deleteAllActivities"
-                     checked>
+              <input type="checkbox" id="deleteAllActivities" name="deleteAllActivities">
               <label for="deleteAllActivities">Yes</label>
             </div>
         
         </fieldset>
+        <br>
         <input type='reset'>
         <input type='submit' value='Delete Activities'>
     </form>
     <br>
     <hr>
+    <a href='/'>Back to main page</a>
 </body>
 </html>
