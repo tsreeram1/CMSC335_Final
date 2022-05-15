@@ -12,7 +12,9 @@
     <br>
     <form action="/processActivity" method="post" onsubmit="return confirm('Are you sure you want to add this activity?');">
     <fieldset>
-        <strong>Activity name: </strong><input type="text" name='name'>
+        <strong>Here's the activity name that was generated for you!</strong>
+        <br><br>
+        <strong>Activity name: </strong><input class="elongate" type="text" value="<%- activityName %>" name='name'>
         <br><br>
         <strong>How long will it take? (in minutes): </strong> <input type='text' name='time'>
         <br><br>
