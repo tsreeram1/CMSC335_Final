@@ -19,8 +19,8 @@ if (process.argv.length != 2) {
 app.set("views", path.resolve(__dirname, "templates"));
 app.set("view engine", "ejs");
 
-console.log(`Web server started and running at http://localhost:3000`);
-http.createServer(app).listen(3000)
+console.log(`Web server started and running Somewhere`);
+http.createServer(app).listen(process.env.PORT || 3000)
 
 app.use(bodyParser.urlencoded({extended:false}));
 
