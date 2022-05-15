@@ -3,19 +3,13 @@ let path = require("path");
 let express = require("express"); /* Accessing express module */
 let app = express(); /* app is a request handler function */
 let bodyParser = require("body-parser");
-require("dotenv").config({ path: path.resolve(__dirname, 'credentials/.env') })
-process.stdin.setEncoding("utf8");
+
+const MongoModule = require("./MongoModule");
+
+const { render } = require('ejs');
 app.use(express.static(__dirname));
 
-const userName = process.env.MONGO_DB_USERNAME;
-const password = process.env.MONGO_DB_PASSWORD;
-const dbName = process.env.MONGO_DB_NAME;
-const collectionName = process.env.MONGO_COLLECTION;
-
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = `mongodb+srv://${userName}:${password}@cluster0.7hqzy.mongodb.net/${dbName}?retryWrites=true&w=majority`;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-
+process.stdin.setEncoding("utf8");
 if (process.argv.length != 3) {
     process.stdout.write(`Usage finalSubmission.js PORT_NUMBER_HERE\n`);
     process.exit(1);
@@ -23,6 +17,12 @@ if (process.argv.length != 3) {
 
 app.set("views", path.resolve(__dirname, "templates"));
 app.set("view engine", "ejs");
+
+let portNumber = process.argv[2];
+console.log(`Web server started and running at http://localhost:${portNumber}`);
+http.createServer(app).listen(portNumber)
+
+app.use(bodyParser.urlencoded({extended:false}));
 
 app.get("/", function (request, response) {
   response.render("index");
@@ -33,21 +33,33 @@ app.get("/addActivity", function (request, response) {
   response.render("addActivity");
 });
 
-// Function to add to mongoDB
-async function insertApplication(client, newData) {
-  const result = await client.db(dbName).collection(collectionName).insertOne(newData);
-}
-
-app.use(bodyParser.urlencoded({extended:false}));
 app.post("/processActivity", (request, response) => {
+  let {name, time, instruction} = request.body;
+  let variables = {
+    name: name,
+    time: time,
+    instruction: instruction
+  }
+  MongoModule.insertApplication(variables);
+  response.render("activityReview", variables)
+});
+
+app.get("/randomActivity", async function (request, response) {
+  let data = await MongoModule.getAll();
+  let randIndex = Math.floor(Math.random() * data.length);
+  let variables = {
+        name: data[randIndex].name,
+        time: data[randIndex].time,
+        instruction: data[randIndex].instruction
+  }
+  response.render("getRandom", variables)
+});
+
+app.get("/deleteActivity", (request, response) => {
   (async () => {
     try {
       await client.connect();
-      let newData = {
-        name: request.body.name,
-        time: request.body.time,
-        instruction: request.body.information,
-      }
+      let activities = {};
       // Insert into mongoDB database
       await insertApplication(client, newData);
       // Display on new page
@@ -58,42 +70,7 @@ app.post("/processActivity", (request, response) => {
       client.close()
     }
   })();
-});
-// Mongo Search
-async function lookUpMany(client) {
-  let filter = {};
-  const cursor = client.db(dbName)
-  .collection(collectionName)
-  .find(filter);
-  //console.log(cursor);
-  const result = await cursor.toArray();
-  return result;
-}
-app.get("/randomActivity", function (request, response) {
-  (async () => {
-    try {
-      await client.connect();
-      // Search mongoDB database
-      let data = await lookUpMany(client);
-      let randIndex = Math.floor(Math.random() * data.length);
-      let newData = {
-        name: data[randIndex].name,
-        time: data[randIndex].time,
-        instruction: data[randIndex].instruction
-      }
-      // Display on new page
-      response.render("getRandom", newData);
-    } catch (e) {
-      console.log("ERROR, ERROR: " + e);
-    } finally {
-      client.close()
-    }
-  })();
-});
-
-let portNumber = process.argv[2];
-console.log(`Web server started and running at http://localhost:${portNumber}`);
-http.createServer(app).listen(portNumber)
+ });
 
 let prompt = "Stop to shutdown the server: ";
 process.stdout.write(prompt);

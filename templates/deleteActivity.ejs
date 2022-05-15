@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>Delete Activity</title>
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<h1>Delete An Activity</h1>
+    <br>
+    <form action="/processDeleteActivity" method="post" onsubmit="return confirm('Are you sure you want to delete this activity/activities?');">
+        <fieldset>
+			<legend>Select activities to delete: </legend>
+			<select name="itemsSelected" multiple>
+				<%- activities %>
+			</select>
+		</fieldset>
+        <fieldset>
+            <legend>Delete all my activities</legend>
+        
+            <div>
+              <input type="checkbox" id="deleteAllActivities" name="deleteAllActivities"
+                     checked>
+              <label for="deleteAllActivities">Yes</label>
+            </div>
+        
+        </fieldset>
+        <input type='reset'>
+        <input type='submit' value='Delete Activities'>
+    </form>
+    <br>
+    <hr>
+</body>
+</html>
