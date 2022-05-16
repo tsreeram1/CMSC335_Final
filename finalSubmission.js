@@ -84,9 +84,13 @@ app.post("/processDeleteActivity", async function(request, response) {
       table += `<tr> <td>${element.name}</td> </tr>`  
     )
   } else if (itemsSelected != null) {
-    itemsSelected.forEach(element =>
-      table += `<tr> <td>${element}</td> </tr>`   
-    )
+    if (Array.isArray(itemsSelected)) {
+      itemsSelected.toArray.forEach(element =>
+        table += `<tr> <td>${element}</td> </tr>`   
+      )
+    } else {
+      table += `<tr> <td>${itemsSelected}</td> </tr>`
+    }
   }
   table += "</tbody> </table>";
   let num = await mongoModule.deleteActivities(itemsSelected, deleteAllActivities);

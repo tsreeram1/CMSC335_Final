@@ -1,10 +1,18 @@
+html {
+    background-image: url(./templates/Paddling_Ocean.png);
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size: cover;
+    font-size: 16px;
+}
+
 h1 {
     color: Red;
     text-decoration: underline;
 }
 
 body {
-    background-image: url(./templates/Paddling_Ocean.png);
+    font-size: 1.25rem;
 }
 
 .elongate {

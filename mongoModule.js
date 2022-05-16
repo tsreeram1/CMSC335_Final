@@ -53,12 +53,19 @@ async function deleteActivities(activities, deleteAllActivities) {
                     .deleteMany({})
             count = result.deletedCount;
         } else if (activities != null) {
-            for (const act of activities) {
+            if (Array.isArray(activities)) {
+                for (const act of activities) {
+                    await client.db(databaseAndCollection.db)
+                        .collection(databaseAndCollection.collection)
+                        .deleteOne({name: act})
+                }
+                count = activities.length;
+            } else {
                 await client.db(databaseAndCollection.db)
-                    .collection(databaseAndCollection.collection)
-                    .deleteOne({name: act})
+                        .collection(databaseAndCollection.collection)
+                        .deleteOne({name: activities});
+                count = 1;
             }
-            count = activities.length;
         }
         return count;
     } catch (e) {
