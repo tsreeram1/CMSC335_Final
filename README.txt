@@ -1,11 +1,11 @@
-# CMSC335_Final
 Tejas Sreeram (), Arshad Roshan (), Aabid Roshan (116491457), Mihir Subhedar (116588911)
-<br /> <br /> 
-# App description 
+ 
+App description: 
 The purpose of this app is this give users a easy way to store and find activities to do
 during the summer. Users can add their own activities to MongoDB, or even find random 
-activities from an API as suggestions to store. <br /> 
-# Need to do API description + heroku + video
-API link:  <br /> 
-Heroku link: <br /> 
-Youtube demo link: <br /> 
+activities from an API as suggestions to store. 
+
+Links:
+API link:   
+Heroku link:  
+Youtube demo link: https://youtu.be/V1AycEPWYHc 

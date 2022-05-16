@@ -54,11 +54,20 @@ app.post("/processActivity", (request, response) => {
 
 app.get("/randomActivity", async function (request, response) {
   let data = await mongoModule.getAll();
-  let randIndex = Math.floor(Math.random() * data.length);
-  let variables = {
-        name: data[randIndex].name,
-        time: data[randIndex].time,
-        instruction: data[randIndex].instruction
+  let variables = {}
+  if (data.length > 0) {
+    let randIndex = Math.floor(Math.random() * data.length);
+    variables = {
+          name: data[randIndex].name,
+          time: data[randIndex].time,
+          instruction: data[randIndex].instruction
+    }
+  } else {
+    variables = {
+      name: "NONE",
+      time: "NONE",
+      instruction: "NONE"
+    }
   }
   response.render("getRandom", variables)
 });
